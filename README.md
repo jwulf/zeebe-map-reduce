@@ -1,12 +1,12 @@
-# Zeebe Map Reduce
+# Zeebe Map/Reduce
 
 Reusable Map/Reduce workflow in Zeebe, as a Node module.
 
 Not meant to be used as-is in-production, but:
 
--   Gives you an idea of how to orchestrate map/reduce tasks with Zeebe
--   Gives you an idea of how to create an API / library of Zeebe functionality that can be composed/reused at the Application level
--   Demonstrates (optional) strong typing of job variables and messages using Generics with the 0.17-compatible version of the Zeebe TypeScript library
+-   Gives you an idea of how to orchestrate map/reduce tasks with Zeebe. The BPMN diagram in `bpmn/map-reduce.bpmn` implements a map/reduce workflow.
+-   Gives you an idea of how to create an API / library of Zeebe functionality that can be composed/reused at the Application level. The `ZeebeMapProcess` class in `src/lib/ZeebeMapProcess` can map any workflow over any set of inputs.
+-   Demonstrates (optional) strong typing of job variables and messages using Generics with the 0.17-compatible version of the Zeebe TypeScript library.
 
 ## Prerequisites
 

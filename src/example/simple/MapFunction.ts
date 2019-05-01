@@ -5,10 +5,7 @@ import { deployMapFunctionWorkflow } from './lib/deployMapFunctionWorkflow'
 async function main() {
 	await deployMapFunctionWorkflow()
 
-	const zmap = new ZeebeMapFunction({
-		brokerAddress: 'localhost',
-		mapFunctionId: 'do-processing',
-	})
+	const zmap = new ZeebeMapFunction('localhost')
 
 	const lorem = new LoremIpsum({
 		sentencesPerParagraph: {
@@ -23,7 +20,7 @@ async function main() {
 
 	const content = lorem.generateParagraphs(180).split('\n')
 	console.log(`Input: ${content.length} elements`)
-	zmap.map(content, { callback: console.log })
+	zmap.map(content, 'do-processing', { callback: console.log })
 }
 
 main()

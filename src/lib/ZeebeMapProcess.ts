@@ -22,7 +22,7 @@ export interface MapFunctionInput {
 }
 
 export interface MapFunctionOutput {
-	currentValue: any
+	element: any
 }
 
 interface MapReduceOutput extends MapReduceInput {
@@ -44,18 +44,10 @@ interface MapTask extends MapTaskCallback {
 export class ZeebeMapFunction<Input, Headers, Output> {
 	private zbc: ZBClient
 	private ready: boolean = false
-	private mapFunctionId: string
 	private tasks: { [key: string]: MapTask }
 	private queue: any[] = []
 
-	constructor({
-		brokerAddress,
-		mapFunctionId,
-	}: {
-		brokerAddress: string
-		mapFunctionId: string
-	}) {
-		this.mapFunctionId = mapFunctionId
+	constructor(brokerAddress: string) {
 		this.zbc = new ZBClient(brokerAddress)
 		this.createReducerWorker()
 		this.createOutputWorker()
@@ -70,7 +62,7 @@ export class ZeebeMapFunction<Input, Headers, Output> {
 					this.ready = true
 					this.queue.forEach(task => {
 						console.log('Executing queued map task')
-						this.map(task.elements, {
+						this.map(task.elements, task.mapFunctionId, {
 							callback: task.callback,
 							callbackProcessId: task.callbackProcessId,
 							callbackMessageCorrelationKey:
@@ -85,6 +77,7 @@ export class ZeebeMapFunction<Input, Headers, Output> {
 
 	map(
 		elements: any[],
+		mapFunctionId: string,
 		{
 			callback,
 			callbackProcessId,
@@ -93,7 +86,7 @@ export class ZeebeMapFunction<Input, Headers, Output> {
 	) {
 		if (!this.ready) {
 			console.log('Queuing this task')
-			return this.queueTask(elements, {
+			return this.queueTask(elements, mapFunctionId, {
 				callback,
 				callbackProcessId,
 				callbackMessageCorrelationKey,
@@ -107,7 +100,7 @@ export class ZeebeMapFunction<Input, Headers, Output> {
 			callbackProcessId,
 			elements,
 			done: false,
-			mapFunctionId: this.mapFunctionId,
+			mapFunctionId,
 			correlationKey,
 			accumulator: [],
 		})
@@ -128,7 +121,7 @@ export class ZeebeMapFunction<Input, Headers, Output> {
 				const { elements = [], mapFunctionId } = job.variables
 				const { correlationKey } = job.variables
 				const tasks = elements.map(element =>
-					this.zbc.createWorkflowInstance(this.mapFunctionId, {
+					this.zbc.createWorkflowInstance(mapFunctionId, {
 						element,
 						correlationKey,
 					})
@@ -203,6 +196,7 @@ export class ZeebeMapFunction<Input, Headers, Output> {
 
 	private queueTask(
 		elements: any[],
+		mapFunctionId: string,
 		{
 			callback,
 			callbackProcessId,
@@ -214,6 +208,7 @@ export class ZeebeMapFunction<Input, Headers, Output> {
 			callback,
 			callbackProcessId,
 			callbackMessageCorrelationKey,
+			mapFunctionId,
 		})
 	}
 }
