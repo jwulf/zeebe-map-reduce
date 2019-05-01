@@ -1,6 +1,6 @@
 # Zeebe Map/Reduce
 
-Reusable Map/Reduce workflow in Zeebe, as a Node module.
+Reusable Map/Reduce workflow in [Zeebe](https://zeebe.io) - a workflow engine for orchestrating microservices - as a Node module.
 
 Not meant to be used as-is in-production, but:
 
