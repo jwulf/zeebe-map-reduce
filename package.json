@@ -1,26 +1,26 @@
 {
-  "name": "zeebe-map-reduce",
-  "version": "1.0.0",
-  "description": "Reusable Map/Reduce workflow in Zeebe",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/jwulf/zeebe-map-reduce.git"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/jwulf/zeebe-map-reduce/issues"
-  },
-  "homepage": "https://github.com/jwulf/zeebe-map-reduce#readme",
-  "dependencies": {
-    "@types/uuid": "^3.4.4",
-    "lorem-ipsum": "^2.0.1",
-    "uuid": "^3.3.2",
-    "zeebe-node": "^1.2.0"
-  }
+	"name": "zeebe-map-reduce",
+	"version": "1.0.0",
+	"description": "Reusable Map/Reduce workflow in Zeebe",
+	"main": "index.js",
+	"scripts": {
+		"test": "echo \"Error: no test specified\" && exit 1"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/jwulf/zeebe-map-reduce.git"
+	},
+	"keywords": [],
+	"author": "",
+	"license": "ISC",
+	"bugs": {
+		"url": "https://github.com/jwulf/zeebe-map-reduce/issues"
+	},
+	"homepage": "https://github.com/jwulf/zeebe-map-reduce#readme",
+	"dependencies": {
+		"@types/uuid": "^3.4.4",
+		"lorem-ipsum": "^2.0.1",
+		"uuid": "^3.3.2",
+		"zeebe-node": "^2.0.0"
+	}
 }
