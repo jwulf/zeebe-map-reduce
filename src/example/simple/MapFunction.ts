@@ -1,11 +1,11 @@
 import { LoremIpsum } from 'lorem-ipsum'
-import { ZeebeMapFunction } from '../../lib/ZeebeMapProcess'
+import { ZeebeMapper } from '../../lib/ZeebeMapper'
 import { deployMapFunctionWorkflow } from './lib/deployMapFunctionWorkflow'
 
 async function main() {
 	await deployMapFunctionWorkflow()
 
-	const zmap = new ZeebeMapFunction('localhost')
+	const zmap = new ZeebeMapper('localhost')
 
 	const lorem = new LoremIpsum({
 		sentencesPerParagraph: {

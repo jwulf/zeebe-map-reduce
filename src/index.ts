@@ -1,5 +1,5 @@
 export {
-	MapFunctionInput,
-	MapFunctionOutput,
-	ZeebeMapFunction,
-} from './lib/ZeebeMapProcess'
+	ZeebeMapFunctionInput,
+	ZeebeMapFunctionResponse,
+	ZeebeMapper,
+} from './lib/ZeebeMapper'

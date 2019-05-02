@@ -1,6 +1,9 @@
 import { v4 as uuid } from 'uuid'
 import { ZBClient } from 'zeebe-node'
-import { MapFunctionInput } from '../../lib/ZeebeMapProcess'
+import {
+	ZeebeMapFunctionInput,
+	ZeebeMapFunctionResponse,
+} from '../../lib/ZeebeMapper'
 import { deployMapFunctionWorkflow } from './lib/deployMapFunctionWorkflow'
 
 const mapFunctionWorkflow = './bpmn/do-processing'
@@ -13,7 +16,7 @@ async function main() {
 }
 
 function createWorker() {
-	return zbc.createWorker<MapFunctionInput>(
+	return zbc.createWorker<ZeebeMapFunctionInput>(
 		uuid(),
 		'do-processing',
 		(job, complete) => {
@@ -25,7 +28,7 @@ function createWorker() {
 				.toUpperCase()
 			// Simulate a processing task that takes 2 - 15 seconds to complete
 			setTimeout(() => {
-				zbc.publishMessage({
+				zbc.publishMessage<ZeebeMapFunctionResponse>({
 					name: 'collect-result',
 					correlationKey,
 					timeToLive: 30000,

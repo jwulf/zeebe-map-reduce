@@ -16,12 +16,12 @@ export interface MapReduceInput {
 	accumulator: any[]
 }
 
-export interface MapFunctionInput {
+export interface ZeebeMapFunctionInput {
 	element: any
 	correlationKey: string
 }
 
-export interface MapFunctionOutput {
+export interface ZeebeMapFunctionResponse {
 	element: any
 }
 
@@ -41,7 +41,7 @@ interface MapTask extends MapTaskCallback {
 	workflowInstanceMd: any
 }
 
-export class ZeebeMapFunction<Input, Headers, Output> {
+export class ZeebeMapper<Input, Headers, Output> {
 	private zbc: ZBClient
 	private ready: boolean = false
 	private tasks: { [key: string]: MapTask }
