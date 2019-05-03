@@ -29,13 +29,13 @@ npm i
 -   Start a single mapFunction worker:
 
 ```bash
-ts-node src/example/simple/MapFunctionWorker.ts
+ts-node typescript/src/example/simple/MapFunctionWorker.ts
 ```
 
 -   In another window, start the map workflow:
 
 ```bash
-ts-node src/example/simple/MapFunction.ts
+ts-node typescript/src/example/simple/MapFunction.ts
 ```
 
 -   You can start additional mapFunction workers in other terminals to observe the effect of scaling up workers on the overall speed of the process.
@@ -57,17 +57,23 @@ From an application-programming perspective, the `Split Inputs/Map` task takes a
 }
 ```
 
-It has a similar signature to the lodash `map` method. It takes the elements to map over, and a "function" to map over them.
+It has the same signature as the [lodash `map` method](https://dustinpfister.github.io/2018/02/02/lodash_map/):
+
+```javascript
+_.map(elements, mapFunction)
+```
+
+It takes the elements to map over, and a "function" to map over them.
 
 In this case, the "function" that it will map over the elements is another Zeebe workflow. We pass in the id for this workflow.
 
 Using a separate workflow for this achieves three outcomes:
 
--   It allows the workers that service the mapFunction workflow to be scaled up.
+-   It allows the workers that service the mapFunction workflow to be scaled.
 -   It allows us to separate the wiring mechanics of map/reduce from the specific transformation in the workflow diagrams.
 -   It allows us to encapsulate and reuse this generic map/reduce functionality at the application-programming level.
 
-The mapFunction<T> workflow needs to consume an input that has this shape:
+The `mapFunction<T>` workflow needs to consume an input that has this shape:
 
 ```javascript
 {
@@ -75,6 +81,24 @@ The mapFunction<T> workflow needs to consume an input that has this shape:
     correlationKey: string
 }
 ```
+
+This implements the lambda function provided to the `map` method in many languages, for example:
+
+```typescript
+elements.map(element => mapFunction(element))
+```
+
+It is inspired by [Kotlin's approach](https://medium.com/@elye.project/kotlin-for-loop-vs-foreach-7eb594960333), where the input parameter signature defaults to `it`:
+
+```kotlin
+(0..10).forEach { println(it) }
+```
+
+In the case of Kotlin, you get a closure with a parameter `it`. It's an opinionated shortcut.
+
+In this case, rather than `it`, the input parameter name is set to `element`.
+
+Your mapFunction workflow will be called for each `element` in the `elements` array of inputs. It needs to consume the `element` variable for the workflow, and the `correlationKey` is used to publish the result back to the main map workflow, where it will be collected.
 
 This repo contains an example `mapFunction` implementation in `bpmn/do-processing.bpmn`.
 
