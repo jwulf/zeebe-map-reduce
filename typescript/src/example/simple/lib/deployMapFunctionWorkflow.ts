@@ -5,5 +5,5 @@ const mapFunctionWorkflow = './bpmn/do-processing.bpmn'
 const zbc = new ZBClient('localhost')
 
 export function deployMapFunctionWorkflow() {
-	return zbc.deployWorkflow(mapFunctionWorkflow, { redeploy: false })
+	return zbc.deployWorkflow(mapFunctionWorkflow)
 }

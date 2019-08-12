@@ -21,6 +21,6 @@
 		"@types/uuid": "^3.4.4",
 		"lorem-ipsum": "^2.0.1",
 		"uuid": "^3.3.2",
-		"zeebe-node": "^2.0.0"
+		"zeebe-node": "v0.20.1"
 	}
 }

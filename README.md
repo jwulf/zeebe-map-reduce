@@ -12,6 +12,7 @@ Not meant to be used as-is in-production, but:
 
 -   Node
 -   ts-node
+-   Zeebe 0.20.0 (Recommended: [Zeebe Docker](https://github.com/zeebe-io/zeebe-docker-compose))
 
 ```
 npm i -g ts-node

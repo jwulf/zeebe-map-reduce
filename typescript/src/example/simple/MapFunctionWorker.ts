@@ -43,6 +43,7 @@ function createWorker() {
 		},
 		{
 			timeout: 20000,
+			maxJobsToActivate: 128,
 		}
 	)
 }

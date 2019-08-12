@@ -11,7 +11,7 @@ export interface MapReduceInput {
 	callbackProcessId?: string
 	elements: any[]
 	done: boolean
-	mapFunctionId: string
+	mapFunctionWorkflowId: string
 	correlationKey: string
 	accumulator: any[]
 }
@@ -52,25 +52,21 @@ export class ZeebeMapper<Input, Headers, Output> {
 		this.createReducerWorker()
 		this.createOutputWorker()
 		this.createMapWorker()
-		this.zbc
-			.deployWorkflow(mapWorkflowFile, { redeploy: false })
-			.then(() => {
-				console.log(
-					'Waiting 2 seconds to ensure all workers are ready...'
-				)
-				setTimeout(() => {
-					this.ready = true
-					this.queue.forEach(task => {
-						console.log('Executing queued map task')
-						this.map(task.elements, task.mapFunctionId, {
-							callback: task.callback,
-							callbackProcessId: task.callbackProcessId,
-							callbackMessageCorrelationKey:
-								task.callbackMessageCorrelationKey,
-						})
+		this.zbc.deployWorkflow(mapWorkflowFile).then(() => {
+			console.log('Waiting 2 seconds to ensure all workers are ready...')
+			setTimeout(() => {
+				this.ready = true
+				this.queue.forEach(task => {
+					console.log('Executing queued map task')
+					this.map(task.elements, task.mapFunctionId, {
+						callback: task.callback,
+						callbackProcessId: task.callbackProcessId,
+						callbackMessageCorrelationKey:
+							task.callbackMessageCorrelationKey,
 					})
-				}, 2000)
-			})
+				})
+			}, 2000)
+		})
 
 		this.tasks = {}
 	}
@@ -100,7 +96,7 @@ export class ZeebeMapper<Input, Headers, Output> {
 			callbackProcessId,
 			elements,
 			done: false,
-			mapFunctionId,
+			mapFunctionWorkflowId: mapFunctionId,
 			correlationKey,
 			accumulator: [],
 		})
@@ -118,10 +114,10 @@ export class ZeebeMapper<Input, Headers, Output> {
 			uuid(),
 			'map',
 			(job, complete) => {
-				const { elements = [], mapFunctionId } = job.variables
+				const { elements = [], mapFunctionWorkflowId } = job.variables
 				const { correlationKey } = job.variables
 				const tasks = elements.map(element =>
-					this.zbc.createWorkflowInstance(mapFunctionId, {
+					this.zbc.createWorkflowInstance(mapFunctionWorkflowId, {
 						element,
 						correlationKey,
 					})
